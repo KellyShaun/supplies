@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>School Pricing</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -381,11 +382,152 @@
       from { opacity: 0; transform: translateY(13px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    /* ═══════════════════════════════════════════
+       MOBILE RESPONSIVE  (≤ 768px)
+       Strategy: sidebar becomes a slide-in drawer
+       triggered by a hamburger in the topbar.
+       All grids collapse to 1-col, tables scroll,
+       content padding tightens.
+    ═══════════════════════════════════════════ */
+    .hamburger {
+      display: none;
+      align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); font-size: 18px; cursor: pointer;
+      flex-shrink: 0; transition: all .15s;
+    }
+    .hamburger:hover { color: var(--text); border-color: rgba(255,255,255,.15); }
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.55); z-index: 99;
+      backdrop-filter: blur(2px);
+    }
+    .sidebar-overlay.visible { display: block; }
+
+    @media (max-width: 768px) {
+      /* Viewport body */
+      body { overflow-x: hidden; }
+
+      /* Hamburger visible, sidebar off-screen by default */
+      .hamburger { display: flex; }
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform .28s cubic-bezier(.4,0,.2,1);
+        z-index: 200;
+        box-shadow: 4px 0 32px rgba(0,0,0,.5);
+      }
+      .sidebar.open { transform: translateX(0); }
+
+      /* Main takes full width */
+      .main { margin-left: 0 !important; }
+
+      /* Topbar tighten */
+      .topbar { padding: 11px 14px; }
+      .topbar-title { font-size: 16px; }
+
+      /* Content padding */
+      .content { padding: 18px 14px; }
+      .page-header h1 { font-size: 21px; }
+
+      /* Stat grids → 2 cols on phone */
+      .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+      .stats-row  { grid-template-columns: 1fr 1fr !important; gap: 9px !important; }
+      .kpi-grid   { grid-template-columns: 1fr 1fr !important; gap: 9px !important; }
+      .stat-mini .sv { font-size: 17px; }
+      .stat-card  { padding: 15px 13px; }
+
+      /* Two-col forms → stack */
+      .two-col { grid-template-columns: 1fr !important; gap: 16px !important; }
+      .form-card { position: static !important; }
+
+      /* Report grid → 1 col */
+      .report-grid { grid-template-columns: 1fr !important; }
+
+      /* Quick access grid → 3 cols */
+      .quick-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+      .quick-card { padding: 13px 8px; font-size: 11.5px; }
+      .quick-card .qicon { font-size: 18px; }
+
+      /* Tables — horizontal scroll wrapper */
+      .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .data-table th, .data-table td { white-space: nowrap; padding: 9px 12px; }
+      .inv-table th, .inv-table td  { white-space: nowrap; }
+
+      /* Card inner padding */
+      .card-body  { padding: 14px 13px; }
+      .card-header{ padding: 11px 14px; }
+      .form-body  { padding: 14px 13px; }
+      .form-card-hdr { padding: 12px 14px; }
+
+      /* Search bar */
+      .search-input { max-width: 100% !important; }
+      .search-bar { padding: 9px 13px; }
+
+      /* Add-row on companies/schools → stack */
+      .add-row { flex-direction: column; }
+      .add-row .input-f,
+      .add-row .field-group,
+      .add-row .btn-primary { width: 100%; }
+
+      /* Form rows → stack */
+      .form-row { flex-direction: column; }
+      .form-row .field-group { min-width: 100%; }
+
+      /* Delivery company group header — wrap on small */
+      .company-group-hdr { flex-wrap: wrap; gap: 6px; padding: 9px 13px; }
+      .company-name-lbl  { font-size: 12.5px; }
+      .company-count-lbl { font-size: 11px; }
+
+      /* Date tabs scroll */
+      .date-tabs { overflow-x: auto; flex-wrap: nowrap !important; padding: 9px 12px; }
+      .date-tab  { white-space: nowrap; flex-shrink: 0; }
+
+      /* Cat tabs scroll */
+      .cat-tabs  { overflow-x: auto; flex-wrap: nowrap !important; padding-bottom: 4px; }
+      .cat-tab   { white-space: nowrap; flex-shrink: 0; }
+
+      /* Pricing stats row */
+      .stats-row.pricing-stats { grid-template-columns: 1fr 1fr !important; }
+
+      /* Toast — full width at bottom */
+      .toast { left: 12px; right: 12px; bottom: 12px; font-size: 12.5px; }
+
+      /* Outstanding alert */
+      #outstandingAlert { padding: 13px 14px; }
+
+      /* Invoice preview table scroll */
+      .preview-table-wrap { overflow-x: auto; }
+
+      /* Reports filter row */
+      .filter-row { flex-direction: column; gap: 10px; }
+
+      /* Balance chip */
+      .balance-chip { flex-wrap: wrap; }
+
+      /* Hide "Added" and extra columns on tiny tables to reduce clutter */
+      .data-table .hide-mobile { display: none; }
+
+      /* Delivery rows tighten */
+      .del-row { padding: 9px 13px; gap: 9px; }
+      .del-name { font-size: 13px; }
+      .del-qty  { font-size: 14px; }
+    }
+
+    @media (max-width: 380px) {
+      /* Very small phones (SE, Galaxy A series) */
+      .stats-grid { grid-template-columns: 1fr !important; }
+      .stats-row  { grid-template-columns: 1fr !important; }
+      .kpi-grid   { grid-template-columns: 1fr !important; }
+      .quick-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+
   </style>
 </head>
 <body>
 
   <!-- SIDEBAR -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon">📊</div>
@@ -491,7 +633,7 @@
             </tr>
           </thead>
           <tbody id="pricingTable"></tbody>
-        </table>
+        </table></div>
         <div class="empty-state" id="emptyState" style="display:none">
           <div class="ei">🏷️</div>
           <p>No items found for this school.</p>
@@ -719,5 +861,19 @@
     }
   </script>
 
+  <script>
+  (function(){
+    var btn = document.getElementById('hamburger');
+    var sb  = document.querySelector('.sidebar');
+    var ov  = document.getElementById('sidebarOverlay');
+    if(!btn||!sb||!ov) return;
+    function open()  { sb.classList.add('open');    ov.classList.add('visible');    document.body.style.overflow='hidden'; }
+    function close() { sb.classList.remove('open'); ov.classList.remove('visible'); document.body.style.overflow=''; }
+    btn.addEventListener('click', open);
+    ov.addEventListener('click', close);
+    // Close on nav-link tap (mobile UX)
+    sb.querySelectorAll('a.nav-link').forEach(function(a){ a.addEventListener('click', close); });
+  })();
+  </script>
 </body>
 </html>
