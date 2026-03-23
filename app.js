@@ -64,6 +64,9 @@ function undoDelete(key) {
 // ─────────────────────────────────────────────
 window.onload = async () => {
 
+  // Companies page
+  if (onPage("companyList"))    loadCompanies();
+
   // Dashboard
   if (onPage("statSchools"))    loadDashboard();
 
@@ -83,6 +86,7 @@ window.onload = async () => {
   if (onPage("deliverySchool")) {
     await loadSchoolsIntoDropdown("deliverySchool");
     await loadAllItemsForDelivery();
+    await loadCompaniesIntoDeliveryForm();
     loadDeliveries();
   }
 
@@ -158,6 +162,58 @@ async function deleteSchool(id) {
     const { error } = await client.from("schools").delete().eq("id", id);
     if (error) showToast("Error deleting school", "error");
   }, loadSchools);
+}
+
+// ─────────────────────────────────────────────
+// COMPANIES
+// ─────────────────────────────────────────────
+async function addCompany() {
+  const nameEl    = document.getElementById("companyName");
+  const contactEl = document.getElementById("companyContact");
+  const phoneEl   = document.getElementById("companyPhone");
+  const name      = nameEl?.value.trim();
+  if (!name) return showToast("Enter a company name", "error");
+
+  const { error } = await client.from("companies").insert([{
+    name,
+    contact_person: contactEl?.value.trim() || null,
+    phone:          phoneEl?.value.trim()   || null
+  }]);
+  if (error) return showToast("Error adding company: " + error.message, "error");
+
+  if (nameEl)    nameEl.value    = "";
+  if (contactEl) contactEl.value = "";
+  if (phoneEl)   phoneEl.value   = "";
+  showToast("Company added");
+  loadCompanies();
+}
+
+async function loadCompanies() {
+  const { data, error } = await client.from("companies").select("*").order("name");
+  if (error) return showToast("Error loading companies", "error");
+  if (typeof renderCompanies === "function") renderCompanies(data);
+}
+
+async function deleteCompany(id) {
+  softDelete("Company", async () => {
+    const { error } = await client.from("companies").delete().eq("id", id);
+    if (error) showToast("Error deleting company", "error");
+  }, loadCompanies);
+}
+
+// Load companies into the delivery form dropdown
+async function loadCompaniesIntoDeliveryForm() {
+  const { data, error } = await client.from("companies").select("*").order("name");
+  if (error) return;
+  const sel = document.getElementById("deliveryCompany");
+  if (!sel) return;
+  sel.innerHTML = "<option value=''>— Select company —</option>";
+  (data || []).forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
 }
 
 // ─────────────────────────────────────────────
@@ -343,10 +399,11 @@ function filterItemsByCategory() {
 }
 
 async function addDelivery() {
-  const schoolId = document.getElementById("deliverySchool")?.value;
-  const itemId   = document.getElementById("deliveryItem")?.value;
-  const quantity = Number(document.getElementById("quantity")?.value);
-  const unit     = typeof getSelectedUnit === "function" ? getSelectedUnit() : "pcs";
+  const schoolId  = document.getElementById("deliverySchool")?.value;
+  const itemId    = document.getElementById("deliveryItem")?.value;
+  const quantity  = Number(document.getElementById("quantity")?.value);
+  const unit      = typeof getSelectedUnit === "function" ? getSelectedUnit() : "pcs";
+  const companyId = document.getElementById("deliveryCompany")?.value || null;
 
   if (!schoolId || !itemId || !quantity) {
     return showToast("Fill all fields", "error");
@@ -367,11 +424,12 @@ async function addDelivery() {
   const total = quantity * priceData.price;
 
   const { error } = await client.from("deliveries").insert([{
-    school_id: schoolId,
-    item_id:   itemId,
+    school_id:  schoolId,
+    item_id:    itemId,
     quantity,
     unit,
-    total
+    total,
+    company_id: companyId
   }]);
 
   if (error) return showToast("Error saving delivery: " + error.message, "error");
@@ -387,20 +445,22 @@ async function addDelivery() {
 async function loadDeliveries() {
   const { data, error } = await client
     .from("deliveries")
-    .select("*, schools(name), items(name, category)")
+    .select("*, schools(name), items(name, category), companies(name)")
     .order("created_at", { ascending: false });
 
   if (error) return showToast("Error loading deliveries", "error");
 
   const rows = data.map(d => ({
-    id:          d.id,
-    school_name: d.schools?.name || "—",
-    item_name:   d.items?.name   || "—",
-    category:    d.items?.category || "Others",
-    quantity:    d.quantity,
-    unit:        d.unit || "pcs",
-    price:       d.total / (d.quantity || 1),
-    created_at:  d.created_at
+    id:           d.id,
+    school_name:  d.schools?.name    || "—",
+    item_name:    d.items?.name      || "—",
+    category:     d.items?.category  || "Others",
+    quantity:     d.quantity,
+    unit:         d.unit || "pcs",
+    price:        d.total / (d.quantity || 1),
+    company_id:   d.company_id || null,
+    company_name: d.companies?.name  || null,
+    created_at:   d.created_at
   }));
 
   if (typeof renderDeliveries === "function") renderDeliveries(rows);
