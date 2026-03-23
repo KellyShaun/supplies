@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Invoices</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -235,6 +236,397 @@
       body{background:#fff;color:#000}.main{margin-left:0}.content{padding:0}
       .two-col{grid-template-columns:1fr}.preview-card{border:none}
       .inv-table th,.inv-table td{color:#333;border-color:#ddd}.inv-number{color:#2563eb}}
+
+
+    /* ═══════════════════════════════════════
+       MOBILE / RESPONSIVE  (phone-first)
+    ═══════════════════════════════════════ */
+
+    /* ── Bottom nav bar ── */
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      z-index: 200;
+      padding: 8px 0 max(10px, env(safe-area-inset-bottom));
+    }
+    .bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .bn-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 6px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      min-width: 58px;
+      min-height: 56px;
+      transition: color .15s;
+      -webkit-tap-highlight-color: transparent;
+      justify-content: center;
+    }
+    .bn-item .bn-icon { font-size: 24px; line-height: 1; }
+    .bn-item.active { color: var(--accent); }
+    .bn-item:hover  { color: var(--text); }
+
+    /* ── More drawer (Setup items) ── */
+    .more-drawer {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      z-index: 300;
+      padding: 16px 20px max(24px, env(safe-area-inset-bottom));
+      transform: translateY(100%);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+    }
+    .more-drawer.open { transform: translateY(0); }
+    .drawer-handle {
+      width: 40px; height: 5px;
+      background: var(--border);
+      border-radius: 999px;
+      margin: 0 auto 20px;
+    }
+    .drawer-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 14px;
+      padding: 0 4px;
+    }
+    .drawer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .drawer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 18px 10px;
+      border-radius: 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      min-height: 80px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .drawer-item .di-icon { font-size: 28px; }
+    .drawer-item.danger { color: var(--danger); }
+    .drawer-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 290;
+    }
+    .drawer-overlay.open { display: block; }
+
+    @media (max-width: 768px) {
+      /* Hide desktop sidebar */
+      .sidebar { display: none !important; }
+      .main { margin-left: 0 !important; }
+
+      /* Show bottom nav */
+      .bottom-nav { display: block; }
+      .more-drawer { display: block; }
+
+      /* ── Global font boost ── */
+      body { font-size: 16px !important; }
+
+      /* ── Content padding + room for bottom nav ── */
+      .content { padding: 20px 16px 100px !important; }
+
+      /* ── Topbar ── */
+      .topbar { padding: 14px 16px !important; }
+      .topbar-title { font-size: 18px !important; font-weight: 700 !important; }
+      .back-btn { width: 40px !important; height: 40px !important; font-size: 20px !important; }
+      .avatar { width: 38px !important; height: 38px !important; font-size: 16px !important; }
+
+      /* ── Page headers ── */
+      .page-header h1 { font-size: 24px !important; }
+      .page-header p  { font-size: 15px !important; }
+      .page-header { margin-bottom: 20px !important; }
+
+      /* ── Cards & sections ── */
+      .card, .form-card, .history-card, .saved-card,
+      .preview-card, .list-card, .add-card, .selector-card,
+      .placeholder-card { border-radius: 14px !important; }
+
+      /* ── Card headers ── */
+      .card-header, .list-header, .history-header,
+      .history-hdr, .saved-hdr, .preview-hdr, .rc-header {
+        padding: 16px 18px !important;
+      }
+      .card-title, .list-header-title, .history-title,
+      .saved-title, .preview-title, .rc-title { font-size: 16px !important; }
+
+      /* ── Inputs & selects — large enough to tap ── */
+      .input-f, .select-f, .input-field, .select-field,
+      .input-date, .ctrl-select {
+        font-size: 16px !important;
+        padding: 14px 16px !important;
+        min-height: 50px !important;
+        border-radius: 12px !important;
+      }
+      .select-f, .select-field { padding-right: 40px !important; }
+      .sw::after, .select-wrap::after, .sw-wide::after { right: 14px !important; width: 14px !important; height: 14px !important; }
+
+      /* ── Buttons — big fat tap targets ── */
+      .btn-primary {
+        font-size: 16px !important;
+        padding: 16px 24px !important;
+        min-height: 52px !important;
+        border-radius: 12px !important;
+        width: 100% !important;
+      }
+      .btn-secondary, .btn-sec {
+        font-size: 15px !important;
+        padding: 13px 18px !important;
+        min-height: 48px !important;
+        border-radius: 12px !important;
+      }
+      .btn-del, .btn-del-sm {
+        font-size: 14px !important;
+        padding: 10px 16px !important;
+        min-height: 40px !important;
+        border-radius: 10px !important;
+      }
+      .btn-edit, .btn-save, .btn-cancel {
+        font-size: 14px !important;
+        padding: 10px 16px !important;
+        min-height: 40px !important;
+      }
+      .btn-receipt {
+        font-size: 18px !important;
+        padding: 8px 12px !important;
+        min-height: 40px !important;
+      }
+      .btn-run {
+        font-size: 15px !important;
+        padding: 13px 18px !important;
+        min-height: 48px !important;
+      }
+      .btn-icon {
+        font-size: 14px !important;
+        padding: 9px 14px !important;
+        min-height: 40px !important;
+        border-radius: 9px !important;
+      }
+      .unit-pill {
+        height: 50px !important;
+        padding: 0 18px !important;
+        font-size: 15px !important;
+        border-radius: 10px !important;
+      }
+      .method-pill {
+        padding: 12px 18px !important;
+        font-size: 15px !important;
+        border-radius: 999px !important;
+      }
+      .qdate-btn, .rpill, .cat-tab, .date-tab, .ftab {
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+        border-radius: 999px !important;
+        min-height: 42px !important;
+      }
+
+      /* ── Labels ── */
+      .field-label { font-size: 13px !important; margin-bottom: 6px !important; }
+      .badge { font-size: 13px !important; padding: 5px 12px !important; }
+      .nav-section { font-size: 12px !important; }
+      .muted-text { font-size: 14px !important; }
+      .cat-pill { font-size: 13px !important; padding: 5px 12px !important; }
+
+      /* ── Stats grid — 2 cols ── */
+      .stats-grid, .stats-row { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+      .stat-card { padding: 18px 16px !important; border-radius: 14px !important; }
+      .stat-label, .kpi-label { font-size: 12px !important; }
+      .stat-value { font-size: 24px !important; }
+      .stat-mini .sv, .kpi-value { font-size: 22px !important; }
+      .stat-mini { padding: 16px 14px !important; }
+      .stat-mini .sl { font-size: 12px !important; }
+
+      /* ── Layout ── */
+      .two-col { grid-template-columns: 1fr !important; gap: 16px !important; }
+      .form-card, .form-card-hdr { position: static !important; }
+      .form-body { padding: 18px 16px !important; gap: 16px !important; }
+      .card-body { padding: 18px 16px !important; gap: 16px !important; }
+      .form-row { flex-direction: column !important; gap: 14px !important; }
+      .form-row .field-group { min-width: 0 !important; }
+      .date-row { grid-template-columns: 1fr !important; gap: 12px !important; }
+      .btn-row { flex-direction: column !important; gap: 10px !important; }
+      .add-row { flex-direction: column !important; gap: 12px !important; }
+      .add-row .input-f { width: 100% !important; }
+      .qty-row { gap: 10px !important; }
+
+      /* ── Pill/tab rows — wrap ── */
+      .quick-dates, .range-pills, .cat-tabs,
+      .method-pills, .unit-pills, .date-tabs,
+      .filter-tabs { flex-wrap: wrap !important; gap: 8px !important; }
+
+      /* ── Tables → card stacking ── */
+      .data-table, .pricing-table, .report-table, .inv-table { display: block !important; }
+      .data-table thead, .pricing-table thead,
+      .report-table thead, .inv-table thead { display: none !important; }
+      .data-table tbody, .pricing-table tbody,
+      .report-table tbody, .inv-table tbody { display: block !important; }
+      .data-table tr, .pricing-table tr,
+      .report-table tr, .inv-table tr {
+        display: flex !important;
+        flex-direction: column !important;
+        background: var(--surface2) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 14px !important;
+        margin: 10px 16px !important;
+        padding: 14px 16px !important;
+        gap: 10px !important;
+      }
+      .data-table td, .pricing-table td,
+      .report-table td, .inv-table td {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 6px 0 !important;
+        border: none !important;
+        font-size: 15px !important;
+        line-height: 1.4 !important;
+      }
+      .data-table td::before, .pricing-table td::before,
+      .report-table td::before {
+        content: attr(data-label);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: var(--muted);
+        flex-shrink: 0;
+        margin-right: 10px;
+        min-width: 70px;
+      }
+      .data-table td:last-child,
+      .pricing-table td:last-child { justify-content: flex-end !important; }
+      .school-group-header td { margin: 0 !important; border-radius: 0 !important; }
+      .school-group-label { font-size: 15px !important; }
+
+      /* ── Delivery rows ── */
+      .del-row { padding: 16px !important; gap: 12px !important; }
+      .del-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
+      .del-name { font-size: 15px !important; }
+      .del-meta { font-size: 13px !important; gap: 6px !important; }
+      .del-qty { font-size: 18px !important; }
+      .del-unit { font-size: 13px !important; }
+      .del-amt { font-size: 13px !important; }
+
+      /* ── Payment rows ── */
+      .pay-row { padding: 16px !important; gap: 12px !important; }
+      .pay-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
+      .pay-school { font-size: 15px !important; }
+      .pay-meta { font-size: 13px !important; }
+      .pay-amount { font-size: 17px !important; }
+
+      /* ── Invoice rows ── */
+      .inv-row { padding: 16px !important; gap: 10px !important; flex-wrap: wrap !important; }
+      .inv-row-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
+      .inv-row-num { font-size: 15px !important; }
+      .inv-row-school { font-size: 13px !important; }
+      .inv-row-amount { font-size: 16px !important; }
+      .inv-row-actions { flex-wrap: wrap !important; gap: 6px !important; }
+
+      /* ── Search ── */
+      .search-input, .search-bar input {
+        font-size: 16px !important;
+        padding: 12px 16px 12px 40px !important;
+        max-width: 100% !important;
+        border-radius: 12px !important;
+        min-height: 48px !important;
+      }
+      .search-bar { padding: 14px 16px !important; }
+
+      /* ── Selector card (pricing) ── */
+      .selector-card { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; padding: 16px !important; }
+      .selector-label { font-size: 14px !important; }
+      .sw-wide { max-width: 100% !important; width: 100% !important; }
+      .meta-chip { font-size: 14px !important; padding: 6px 14px !important; }
+
+      /* ── Price cell ── */
+      .price-cell { flex-wrap: wrap !important; gap: 10px !important; }
+      .price-display { font-size: 16px !important; }
+      .price-input { width: 130px !important; font-size: 16px !important; padding: 9px 12px !important; }
+
+      /* ── Quick access grid ── */
+      .quick-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
+      .quick-card { padding: 16px 10px !important; font-size: 13px !important; gap: 8px !important; border-radius: 14px !important; }
+      .quick-card .qicon { font-size: 24px !important; }
+
+      /* ── Section title ── */
+      .section-title { font-size: 17px !important; margin-bottom: 14px !important; }
+
+      /* ── Report layout ── */
+      .report-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+      .bar-label { width: 90px !important; font-size: 13px !important; }
+      .bar-val { font-size: 13px !important; }
+      .cat-name { font-size: 14px !important; }
+      .cat-amt { font-size: 13px !important; }
+      .controls-bar { gap: 10px !important; flex-wrap: wrap !important; }
+
+      /* ── Amount prefix (payments) ── */
+      .amount-prefix { font-size: 15px !important; left: 16px !important; }
+      .amount-wrap .input-f { padding-left: 56px !important; }
+
+      /* ── Balance chip ── */
+      .balance-chip { padding: 12px 14px !important; font-size: 14px !important; border-radius: 12px !important; }
+      .balance-val { font-size: 16px !important; }
+
+      /* ── Item preview ── */
+      .item-preview { font-size: 14px !important; padding: 12px 14px !important; border-radius: 12px !important; }
+      .preview-price { font-size: 15px !important; }
+
+      /* ── Card sub-text ── */
+      .card-sub, .form-card-sub { font-size: 14px !important; }
+
+      /* ── Toast — above bottom nav ── */
+      .toast { bottom: 90px !important; right: 12px !important; left: 12px !important; font-size: 15px !important; padding: 16px 18px !important; border-radius: 14px !important; }
+
+      /* ── Outstanding alert ── */
+      #outstandingAlert { padding: 16px !important; border-radius: 14px !important; font-size: 14px !important; }
+
+      /* ── Placeholder cards ── */
+      .placeholder-card { padding: 48px 20px !important; }
+      .placeholder-card p { font-size: 15px !important; }
+      .ph-box p { font-size: 15px !important; }
+      .empty-state p { font-size: 15px !important; }
+      .empty-state .ei, .empty-state .ei { font-size: 44px !important; }
+    }
+
+    @media (max-width: 400px) {
+      .stats-grid, .stats-row { grid-template-columns: 1fr 1fr !important; }
+      .quick-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .kpi-grid { grid-template-columns: 1fr !important; }
+    }
 
   </style>
 </head>
