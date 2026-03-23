@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Items</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -303,293 +303,245 @@
     }
     .drawer-overlay.open { display: block; }
 
-    @media (max-width: 768px) {
-      /* Hide desktop sidebar */
-      .sidebar { display: none !important; }
-      .main { margin-left: 0 !important; }
+    body.mobile {
+      font-size: 16px !important;
+    }
+    body.mobile .sidebar { display: none !important; }
+    body.mobile .main { margin-left: 0 !important; }
+    body.mobile .bottom-nav { display: block !important; }
+    body.mobile .more-drawer { display: block !important; }
+    body.mobile .content { padding: 20px 16px 100px !important; }
+    body.mobile .topbar { padding: 14px 16px !important; }
+    body.mobile .topbar-title { font-size: 18px !important; font-weight: 700 !important; }
+    body.mobile .back-btn { width: 40px !important; height: 40px !important; font-size: 20px !important; }
+    body.mobile .avatar { width: 38px !important; height: 38px !important; font-size: 16px !important; }
+    body.mobile .page-header h1 { font-size: 24px !important; }
+    body.mobile .page-header p  { font-size: 15px !important; }
+    body.mobile .page-header { margin-bottom: 20px !important; }
+    body.mobile .card-header, body.mobile .list-header, body.mobile .history-header,
+    body.mobile .history-hdr, body.mobile .saved-hdr, body.mobile .preview-hdr,
+    body.mobile .rc-header { padding: 16px 18px !important; }
+    body.mobile .card-title, body.mobile .list-header-title, body.mobile .history-title,
+    body.mobile .saved-title, body.mobile .preview-title, body.mobile .rc-title { font-size: 16px !important; }
 
-      /* Show bottom nav */
-      .bottom-nav { display: block; }
-      .more-drawer { display: block; }
-
-      /* ── Global font boost ── */
-      body { font-size: 16px !important; }
-
-      /* ── Content padding + room for bottom nav ── */
-      .content { padding: 20px 16px 100px !important; }
-
-      /* ── Topbar ── */
-      .topbar { padding: 14px 16px !important; }
-      .topbar-title { font-size: 18px !important; font-weight: 700 !important; }
-      .back-btn { width: 40px !important; height: 40px !important; font-size: 20px !important; }
-      .avatar { width: 38px !important; height: 38px !important; font-size: 16px !important; }
-
-      /* ── Page headers ── */
-      .page-header h1 { font-size: 24px !important; }
-      .page-header p  { font-size: 15px !important; }
-      .page-header { margin-bottom: 20px !important; }
-
-      /* ── Cards & sections ── */
-      .card, .form-card, .history-card, .saved-card,
-      .preview-card, .list-card, .add-card, .selector-card,
-      .placeholder-card { border-radius: 14px !important; }
-
-      /* ── Card headers ── */
-      .card-header, .list-header, .history-header,
-      .history-hdr, .saved-hdr, .preview-hdr, .rc-header {
-        padding: 16px 18px !important;
-      }
-      .card-title, .list-header-title, .history-title,
-      .saved-title, .preview-title, .rc-title { font-size: 16px !important; }
-
-      /* ── Inputs & selects — large enough to tap ── */
-      .input-f, .select-f, .input-field, .select-field,
-      .input-date, .ctrl-select {
-        font-size: 16px !important;
-        padding: 14px 16px !important;
-        min-height: 50px !important;
-        border-radius: 12px !important;
-      }
-      .select-f, .select-field { padding-right: 40px !important; }
-      .sw::after, .select-wrap::after, .sw-wide::after { right: 14px !important; width: 14px !important; height: 14px !important; }
-
-      /* ── Buttons — big fat tap targets ── */
-      .btn-primary {
-        font-size: 16px !important;
-        padding: 16px 24px !important;
-        min-height: 52px !important;
-        border-radius: 12px !important;
-        width: 100% !important;
-      }
-      .btn-secondary, .btn-sec {
-        font-size: 15px !important;
-        padding: 13px 18px !important;
-        min-height: 48px !important;
-        border-radius: 12px !important;
-      }
-      .btn-del, .btn-del-sm {
-        font-size: 14px !important;
-        padding: 10px 16px !important;
-        min-height: 40px !important;
-        border-radius: 10px !important;
-      }
-      .btn-edit, .btn-save, .btn-cancel {
-        font-size: 14px !important;
-        padding: 10px 16px !important;
-        min-height: 40px !important;
-      }
-      .btn-receipt {
-        font-size: 18px !important;
-        padding: 8px 12px !important;
-        min-height: 40px !important;
-      }
-      .btn-run {
-        font-size: 15px !important;
-        padding: 13px 18px !important;
-        min-height: 48px !important;
-      }
-      .btn-icon {
-        font-size: 14px !important;
-        padding: 9px 14px !important;
-        min-height: 40px !important;
-        border-radius: 9px !important;
-      }
-      .unit-pill {
-        height: 50px !important;
-        padding: 0 18px !important;
-        font-size: 15px !important;
-        border-radius: 10px !important;
-      }
-      .method-pill {
-        padding: 12px 18px !important;
-        font-size: 15px !important;
-        border-radius: 999px !important;
-      }
-      .qdate-btn, .rpill, .cat-tab, .date-tab, .ftab {
-        padding: 10px 16px !important;
-        font-size: 14px !important;
-        border-radius: 999px !important;
-        min-height: 42px !important;
-      }
-
-      /* ── Labels ── */
-      .field-label { font-size: 13px !important; margin-bottom: 6px !important; }
-      .badge { font-size: 13px !important; padding: 5px 12px !important; }
-      .nav-section { font-size: 12px !important; }
-      .muted-text { font-size: 14px !important; }
-      .cat-pill { font-size: 13px !important; padding: 5px 12px !important; }
-
-      /* ── Stats grid — 2 cols ── */
-      .stats-grid, .stats-row { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-      .stat-card { padding: 18px 16px !important; border-radius: 14px !important; }
-      .stat-label, .kpi-label { font-size: 12px !important; }
-      .stat-value { font-size: 24px !important; }
-      .stat-mini .sv, .kpi-value { font-size: 22px !important; }
-      .stat-mini { padding: 16px 14px !important; }
-      .stat-mini .sl { font-size: 12px !important; }
-
-      /* ── Layout ── */
-      .two-col { grid-template-columns: 1fr !important; gap: 16px !important; }
-      .form-card, .form-card-hdr { position: static !important; }
-      .form-body { padding: 18px 16px !important; gap: 16px !important; }
-      .card-body { padding: 18px 16px !important; gap: 16px !important; }
-      .form-row { flex-direction: column !important; gap: 14px !important; }
-      .form-row .field-group { min-width: 0 !important; }
-      .date-row { grid-template-columns: 1fr !important; gap: 12px !important; }
-      .btn-row { flex-direction: column !important; gap: 10px !important; }
-      .add-row { flex-direction: column !important; gap: 12px !important; }
-      .add-row .input-f { width: 100% !important; }
-      .qty-row { gap: 10px !important; }
-
-      /* ── Pill/tab rows — wrap ── */
-      .quick-dates, .range-pills, .cat-tabs,
-      .method-pills, .unit-pills, .date-tabs,
-      .filter-tabs { flex-wrap: wrap !important; gap: 8px !important; }
-
-      /* ── Tables → card stacking ── */
-      .data-table, .pricing-table, .report-table, .inv-table { display: block !important; }
-      .data-table thead, .pricing-table thead,
-      .report-table thead, .inv-table thead { display: none !important; }
-      .data-table tbody, .pricing-table tbody,
-      .report-table tbody, .inv-table tbody { display: block !important; }
-      .data-table tr, .pricing-table tr,
-      .report-table tr, .inv-table tr {
-        display: flex !important;
-        flex-direction: column !important;
-        background: var(--surface2) !important;
-        border: 1px solid var(--border) !important;
-        border-radius: 14px !important;
-        margin: 10px 16px !important;
-        padding: 14px 16px !important;
-        gap: 10px !important;
-      }
-      .data-table td, .pricing-table td,
-      .report-table td, .inv-table td {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        padding: 6px 0 !important;
-        border: none !important;
-        font-size: 15px !important;
-        line-height: 1.4 !important;
-      }
-      .data-table td::before, .pricing-table td::before,
-      .report-table td::before {
-        content: attr(data-label);
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        color: var(--muted);
-        flex-shrink: 0;
-        margin-right: 10px;
-        min-width: 70px;
-      }
-      .data-table td:last-child,
-      .pricing-table td:last-child { justify-content: flex-end !important; }
-      .school-group-header td { margin: 0 !important; border-radius: 0 !important; }
-      .school-group-label { font-size: 15px !important; }
-
-      /* ── Delivery rows ── */
-      .del-row { padding: 16px !important; gap: 12px !important; }
-      .del-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
-      .del-name { font-size: 15px !important; }
-      .del-meta { font-size: 13px !important; gap: 6px !important; }
-      .del-qty { font-size: 18px !important; }
-      .del-unit { font-size: 13px !important; }
-      .del-amt { font-size: 13px !important; }
-
-      /* ── Payment rows ── */
-      .pay-row { padding: 16px !important; gap: 12px !important; }
-      .pay-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
-      .pay-school { font-size: 15px !important; }
-      .pay-meta { font-size: 13px !important; }
-      .pay-amount { font-size: 17px !important; }
-
-      /* ── Invoice rows ── */
-      .inv-row { padding: 16px !important; gap: 10px !important; flex-wrap: wrap !important; }
-      .inv-row-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
-      .inv-row-num { font-size: 15px !important; }
-      .inv-row-school { font-size: 13px !important; }
-      .inv-row-amount { font-size: 16px !important; }
-      .inv-row-actions { flex-wrap: wrap !important; gap: 6px !important; }
-
-      /* ── Search ── */
-      .search-input, .search-bar input {
-        font-size: 16px !important;
-        padding: 12px 16px 12px 40px !important;
-        max-width: 100% !important;
-        border-radius: 12px !important;
-        min-height: 48px !important;
-      }
-      .search-bar { padding: 14px 16px !important; }
-
-      /* ── Selector card (pricing) ── */
-      .selector-card { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; padding: 16px !important; }
-      .selector-label { font-size: 14px !important; }
-      .sw-wide { max-width: 100% !important; width: 100% !important; }
-      .meta-chip { font-size: 14px !important; padding: 6px 14px !important; }
-
-      /* ── Price cell ── */
-      .price-cell { flex-wrap: wrap !important; gap: 10px !important; }
-      .price-display { font-size: 16px !important; }
-      .price-input { width: 130px !important; font-size: 16px !important; padding: 9px 12px !important; }
-
-      /* ── Quick access grid ── */
-      .quick-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
-      .quick-card { padding: 16px 10px !important; font-size: 13px !important; gap: 8px !important; border-radius: 14px !important; }
-      .quick-card .qicon { font-size: 24px !important; }
-
-      /* ── Section title ── */
-      .section-title { font-size: 17px !important; margin-bottom: 14px !important; }
-
-      /* ── Report layout ── */
-      .report-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
-      .bar-label { width: 90px !important; font-size: 13px !important; }
-      .bar-val { font-size: 13px !important; }
-      .cat-name { font-size: 14px !important; }
-      .cat-amt { font-size: 13px !important; }
-      .controls-bar { gap: 10px !important; flex-wrap: wrap !important; }
-
-      /* ── Amount prefix (payments) ── */
-      .amount-prefix { font-size: 15px !important; left: 16px !important; }
-      .amount-wrap .input-f { padding-left: 56px !important; }
-
-      /* ── Balance chip ── */
-      .balance-chip { padding: 12px 14px !important; font-size: 14px !important; border-radius: 12px !important; }
-      .balance-val { font-size: 16px !important; }
-
-      /* ── Item preview ── */
-      .item-preview { font-size: 14px !important; padding: 12px 14px !important; border-radius: 12px !important; }
-      .preview-price { font-size: 15px !important; }
-
-      /* ── Card sub-text ── */
-      .card-sub, .form-card-sub { font-size: 14px !important; }
-
-      /* ── Toast — above bottom nav ── */
-      .toast { bottom: 90px !important; right: 12px !important; left: 12px !important; font-size: 15px !important; padding: 16px 18px !important; border-radius: 14px !important; }
-
-      /* ── Outstanding alert ── */
-      #outstandingAlert { padding: 16px !important; border-radius: 14px !important; font-size: 14px !important; }
-
-      /* ── Placeholder cards ── */
-      .placeholder-card { padding: 48px 20px !important; }
-      .placeholder-card p { font-size: 15px !important; }
-      .ph-box p { font-size: 15px !important; }
-      .empty-state p { font-size: 15px !important; }
-      .empty-state .ei, .empty-state .ei { font-size: 44px !important; }
+    /* Inputs & selects */
+    body.mobile .input-f, body.mobile .select-f, body.mobile .input-field,
+    body.mobile .select-field, body.mobile .input-date, body.mobile .ctrl-select {
+      font-size: 16px !important;
+      padding: 14px 16px !important;
+      min-height: 50px !important;
+      border-radius: 12px !important;
+    }
+    body.mobile .select-f, body.mobile .select-field { padding-right: 40px !important; }
+    body.mobile .sw::after, body.mobile .select-wrap::after, body.mobile .sw-wide::after {
+      right: 14px !important; width: 14px !important; height: 14px !important;
     }
 
-    @media (max-width: 400px) {
-      .stats-grid, .stats-row { grid-template-columns: 1fr 1fr !important; }
-      .quick-grid { grid-template-columns: repeat(2, 1fr) !important; }
-      .kpi-grid { grid-template-columns: 1fr !important; }
+    /* Buttons */
+    body.mobile .btn-primary {
+      font-size: 16px !important; padding: 16px 24px !important;
+      min-height: 52px !important; border-radius: 12px !important; width: 100% !important;
     }
+    body.mobile .btn-secondary, body.mobile .btn-sec {
+      font-size: 15px !important; padding: 13px 18px !important;
+      min-height: 48px !important; border-radius: 12px !important;
+    }
+    body.mobile .btn-del {
+      font-size: 14px !important; padding: 10px 16px !important;
+      min-height: 40px !important; border-radius: 10px !important;
+    }
+    body.mobile .btn-edit, body.mobile .btn-save, body.mobile .btn-cancel {
+      font-size: 14px !important; padding: 10px 16px !important; min-height: 40px !important;
+    }
+    body.mobile .btn-receipt { font-size: 18px !important; padding: 8px 12px !important; min-height: 40px !important; }
+    body.mobile .btn-run { font-size: 15px !important; padding: 13px 18px !important; min-height: 48px !important; }
+    body.mobile .btn-icon { font-size: 14px !important; padding: 9px 14px !important; min-height: 40px !important; border-radius: 9px !important; }
+    body.mobile .unit-pill { height: 50px !important; padding: 0 18px !important; font-size: 15px !important; border-radius: 10px !important; }
+    body.mobile .method-pill { padding: 12px 18px !important; font-size: 15px !important; border-radius: 999px !important; }
+    body.mobile .qdate-btn, body.mobile .rpill, body.mobile .cat-tab,
+    body.mobile .date-tab, body.mobile .ftab {
+      padding: 10px 16px !important; font-size: 14px !important;
+      border-radius: 999px !important; min-height: 42px !important;
+    }
+
+    /* Text sizing */
+    body.mobile .field-label { font-size: 13px !important; margin-bottom: 6px !important; }
+    body.mobile .badge { font-size: 13px !important; padding: 5px 12px !important; }
+    body.mobile .muted-text { font-size: 14px !important; }
+    body.mobile .cat-pill { font-size: 13px !important; padding: 5px 12px !important; }
+
+    /* Stats */
+    body.mobile .stats-grid, body.mobile .stats-row {
+      grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important;
+    }
+    body.mobile .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+    body.mobile .stat-card { padding: 18px 16px !important; border-radius: 14px !important; }
+    body.mobile .stat-label, body.mobile .kpi-label { font-size: 12px !important; }
+    body.mobile .stat-value { font-size: 24px !important; }
+    body.mobile .stat-mini .sv, body.mobile .kpi-value { font-size: 22px !important; }
+    body.mobile .stat-mini { padding: 16px 14px !important; }
+    body.mobile .stat-mini .sl { font-size: 12px !important; }
+
+    /* Layout */
+    body.mobile .two-col { grid-template-columns: 1fr !important; gap: 16px !important; }
+    body.mobile .form-card { position: static !important; }
+    body.mobile .form-body { padding: 18px 16px !important; gap: 16px !important; }
+    body.mobile .card-body { padding: 18px 16px !important; gap: 16px !important; }
+    body.mobile .form-row { flex-direction: column !important; gap: 14px !important; }
+    body.mobile .form-row .field-group { min-width: 0 !important; }
+    body.mobile .date-row { grid-template-columns: 1fr !important; gap: 12px !important; }
+    body.mobile .btn-row { flex-direction: column !important; gap: 10px !important; }
+    body.mobile .add-row { flex-direction: column !important; gap: 12px !important; }
+    body.mobile .qty-row { gap: 10px !important; }
+
+    /* Pills & tabs wrap */
+    body.mobile .quick-dates, body.mobile .range-pills, body.mobile .cat-tabs,
+    body.mobile .method-pills, body.mobile .unit-pills, body.mobile .date-tabs,
+    body.mobile .filter-tabs { flex-wrap: wrap !important; gap: 8px !important; }
+
+    /* Tables → stacked cards */
+    body.mobile .data-table, body.mobile .pricing-table,
+    body.mobile .report-table, body.mobile .inv-table { display: block !important; }
+    body.mobile .data-table thead, body.mobile .pricing-table thead,
+    body.mobile .report-table thead, body.mobile .inv-table thead { display: none !important; }
+    body.mobile .data-table tbody, body.mobile .pricing-table tbody,
+    body.mobile .report-table tbody, body.mobile .inv-table tbody { display: block !important; }
+    body.mobile .data-table tr, body.mobile .pricing-table tr,
+    body.mobile .report-table tr, body.mobile .inv-table tr {
+      display: flex !important; flex-direction: column !important;
+      background: var(--surface2) !important; border: 1px solid var(--border) !important;
+      border-radius: 14px !important; margin: 10px 0 !important;
+      padding: 14px 16px !important; gap: 10px !important;
+    }
+    body.mobile .data-table td, body.mobile .pricing-table td,
+    body.mobile .report-table td, body.mobile .inv-table td {
+      display: flex !important; align-items: center !important;
+      justify-content: space-between !important;
+      padding: 6px 0 !important; border: none !important;
+      font-size: 15px !important; line-height: 1.4 !important;
+    }
+    body.mobile .data-table td::before, body.mobile .pricing-table td::before,
+    body.mobile .report-table td::before {
+      content: attr(data-label);
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .5px; color: var(--muted);
+      flex-shrink: 0; margin-right: 10px; min-width: 70px;
+    }
+    body.mobile .data-table td:last-child,
+    body.mobile .pricing-table td:last-child { justify-content: flex-end !important; }
+    body.mobile .school-group-header td { margin: 0 !important; border-radius: 0 !important; }
+    body.mobile .school-group-label { font-size: 15px !important; }
+
+    /* Delivery rows */
+    body.mobile .del-row { padding: 16px !important; gap: 12px !important; }
+    body.mobile .del-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
+    body.mobile .del-name { font-size: 15px !important; }
+    body.mobile .del-meta { font-size: 13px !important; gap: 6px !important; }
+    body.mobile .del-qty { font-size: 18px !important; }
+    body.mobile .del-unit, body.mobile .del-amt { font-size: 13px !important; }
+
+    /* Payment rows */
+    body.mobile .pay-row { padding: 16px !important; gap: 12px !important; }
+    body.mobile .pay-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
+    body.mobile .pay-school { font-size: 15px !important; }
+    body.mobile .pay-meta { font-size: 13px !important; }
+    body.mobile .pay-amount { font-size: 17px !important; }
+
+    /* Invoice rows */
+    body.mobile .inv-row { padding: 16px !important; gap: 10px !important; flex-wrap: wrap !important; }
+    body.mobile .inv-row-icon { width: 42px !important; height: 42px !important; font-size: 20px !important; flex-shrink: 0 !important; }
+    body.mobile .inv-row-num { font-size: 15px !important; }
+    body.mobile .inv-row-school { font-size: 13px !important; }
+    body.mobile .inv-row-amount { font-size: 16px !important; }
+    body.mobile .inv-row-actions { flex-wrap: wrap !important; gap: 6px !important; }
+
+    /* Search */
+    body.mobile .search-input, body.mobile .search-bar input {
+      font-size: 16px !important; padding: 12px 16px 12px 40px !important;
+      max-width: 100% !important; border-radius: 12px !important; min-height: 48px !important;
+    }
+    body.mobile .search-bar { padding: 14px 16px !important; }
+
+    /* Pricing selector */
+    body.mobile .selector-card { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; padding: 16px !important; }
+    body.mobile .selector-label { font-size: 14px !important; }
+    body.mobile .sw-wide { max-width: 100% !important; width: 100% !important; }
+    body.mobile .meta-chip { font-size: 14px !important; padding: 6px 14px !important; }
+
+    /* Price cell */
+    body.mobile .price-cell { flex-wrap: wrap !important; gap: 10px !important; }
+    body.mobile .price-display { font-size: 16px !important; }
+    body.mobile .price-input { width: 130px !important; font-size: 16px !important; padding: 9px 12px !important; }
+
+    /* Quick access */
+    body.mobile .quick-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
+    body.mobile .quick-card { padding: 16px 10px !important; font-size: 13px !important; gap: 8px !important; border-radius: 14px !important; }
+    body.mobile .quick-card .qicon { font-size: 24px !important; }
+    body.mobile .section-title { font-size: 17px !important; margin-bottom: 14px !important; }
+
+    /* Reports */
+    body.mobile .report-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+    body.mobile .bar-label { width: 90px !important; font-size: 13px !important; }
+    body.mobile .controls-bar { gap: 10px !important; flex-wrap: wrap !important; }
+
+    /* Amount prefix */
+    body.mobile .amount-prefix { font-size: 15px !important; left: 16px !important; }
+    body.mobile .amount-wrap .input-f { padding-left: 56px !important; }
+
+    /* Misc */
+    body.mobile .balance-chip { padding: 12px 14px !important; font-size: 14px !important; border-radius: 12px !important; }
+    body.mobile .balance-val { font-size: 16px !important; }
+    body.mobile .item-preview { font-size: 14px !important; padding: 12px 14px !important; border-radius: 12px !important; }
+    body.mobile .preview-price { font-size: 15px !important; }
+    body.mobile .card-sub, body.mobile .form-card-sub { font-size: 14px !important; }
+    body.mobile .toast { bottom: 90px !important; right: 12px !important; left: 12px !important; font-size: 15px !important; padding: 16px 18px !important; border-radius: 14px !important; }
+    body.mobile #outstandingAlert { padding: 16px !important; border-radius: 14px !important; font-size: 14px !important; }
+    body.mobile .placeholder-card { padding: 48px 20px !important; }
+    body.mobile .placeholder-card p, body.mobile .ph-box p,
+    body.mobile .empty-state p { font-size: 15px !important; }
+    body.mobile .empty-state .ei { font-size: 44px !important; }
+
+    body.mobile.narrow .stats-grid, body.mobile.narrow .stats-row {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    body.mobile.narrow .quick-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    body.mobile.narrow .kpi-grid { grid-template-columns: 1fr !important; }
+
 
   </style>
 </head>
 <body>
+  <script>
+    // Detect mobile and add class immediately to prevent flash
+    (function() {
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        || window.innerWidth <= 768
+        || (window.screen && window.screen.width <= 768);
+      if (isMobile) {
+        document.documentElement.classList.add('mobile');
+      }
+      // Also run on resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth <= 768) {
+          document.documentElement.classList.add('mobile');
+          document.body.classList.add('mobile');
+          if (window.innerWidth <= 400) document.body.classList.add('narrow');
+        } else {
+          document.documentElement.classList.remove('mobile');
+          document.body.classList.remove('mobile');
+          document.body.classList.remove('narrow');
+        }
+      });
+      // Apply to body once DOM ready
+      document.addEventListener('DOMContentLoaded', function() {
+        if (isMobile || window.innerWidth <= 768) {
+          document.body.classList.add('mobile');
+          if (window.innerWidth <= 400) document.body.classList.add('narrow');
+        }
+      });
+    })();
+  </script>
+
   <aside class="sidebar">
     <div class="sidebar-logo"><div class="logo-icon">📊</div><span class="logo-text">System</span></div>
     <div class="nav-section">Operations</div>
