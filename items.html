@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Items</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0b0f1a; --surface:#111827; --surface2:#1a2235;
+      --border:rgba(255,255,255,0.07); --accent:#4f8ef7; --accent2:#7c3aed;
+      --accent-glow:rgba(79,142,247,0.18); --text:#f0f4ff; --muted:#6b7a99;
+      --danger:#ef4444; --danger-bg:rgba(239,68,68,0.08);
+      --success:#22c55e; --warning:#f59e0b;
+      --cat-cereals:#f59e0b; --cat-shopping:#22c55e;
+      --cat-uniform:#818cf8; --cat-others:#64748b;
+      --sidebar-w:240px;
+    }
+    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; display:flex; min-height:100vh; overflow-x:hidden; }
+    body::after { content:''; position:fixed; inset:0; pointer-events:none;
+      background:radial-gradient(ellipse at 20% 0%,rgba(79,142,247,0.05) 0%,transparent 60%),
+                radial-gradient(ellipse at 80% 100%,rgba(124,58,237,0.06) 0%,transparent 60%); z-index:0; }
+
+    /* SIDEBAR */
+    .sidebar { width:var(--sidebar-w); min-height:100vh; background:var(--surface);
+      border-right:1px solid var(--border); display:flex; flex-direction:column;
+      padding:22px 13px 18px; position:fixed; top:0; left:0; z-index:100; }
+    .sidebar-logo { display:flex; align-items:center; gap:9px; padding:0 7px 20px;
+      border-bottom:1px solid var(--border); margin-bottom:14px; }
+    .logo-icon { width:33px; height:33px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      border-radius:9px; display:flex; align-items:center; justify-content:center;
+      font-size:16px; box-shadow:0 0 14px var(--accent-glow); flex-shrink:0; }
+    .logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:16px; color:var(--text); }
+    .nav-section { font-size:10px; font-weight:700; letter-spacing:1.3px;
+      text-transform:uppercase; color:var(--muted); padding:0 9px; margin:10px 0 4px; }
+    .nav-link { display:flex; align-items:center; gap:9px; padding:9px 11px; border-radius:9px;
+      color:var(--muted); text-decoration:none; font-size:13.5px; font-weight:500;
+      transition:background .15s,color .15s; cursor:pointer; border:none;
+      background:transparent; width:100%; text-align:left; white-space:nowrap; }
+    .nav-link:hover { background:var(--surface2); color:var(--text); }
+    .nav-link.active { background:var(--accent-glow); color:var(--accent);
+      border:1px solid rgba(79,142,247,0.2); }
+    .nav-link .icon { font-size:15px; width:18px; text-align:center; flex-shrink:0; }
+    .nav-link.danger:hover { background:rgba(239,68,68,0.1); color:var(--danger); }
+    .sidebar-footer { margin-top:auto; padding-top:12px; border-top:1px solid var(--border); }
+
+    /* MAIN */
+    .main { margin-left:var(--sidebar-w); flex:1; display:flex; flex-direction:column;
+      min-height:100vh; position:relative; z-index:1; }
+    .topbar { display:flex; align-items:center; justify-content:space-between;
+      padding:15px 30px; border-bottom:1px solid var(--border);
+      background:var(--surface); position:sticky; top:0; z-index:50; }
+    .topbar-left { display:flex; align-items:center; gap:10px; }
+    .back-btn { display:flex; align-items:center; justify-content:center;
+      width:32px; height:32px; border-radius:8px;
+      background:var(--surface2); border:1px solid var(--border);
+      color:var(--muted); font-size:16px; cursor:pointer;
+      text-decoration:none; transition:all .15s; flex-shrink:0; }
+    .back-btn:hover { background:var(--surface); color:var(--text); border-color:rgba(255,255,255,0.15); }
+    .topbar-title { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; color:var(--text); }
+    .avatar { width:33px; height:33px; border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:flex; align-items:center; justify-content:center;
+      font-size:14px; font-weight:700; font-family:'Syne',sans-serif; cursor:pointer; }
+    .content { padding:32px 30px; flex:1; }
+    .page-header { margin-bottom:24px; animation:fadeUp .4s ease both; }
+    .page-header h1 { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; letter-spacing:-.4px; }
+    .page-header p { color:var(--muted); font-size:13.5px; margin-top:4px; }
+
+    /* FORM COMPONENTS */
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+    .card-header { display:flex; align-items:center; justify-content:space-between;
+      padding:14px 20px; border-bottom:1px solid var(--border); gap:10px; flex-wrap:wrap; }
+    .card-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; }
+    .card-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+    .card-body { padding:18px 20px; display:flex; flex-direction:column; gap:13px; }
+    .field-group { display:flex; flex-direction:column; gap:5px; }
+    .field-label { font-size:11.5px; font-weight:600; color:var(--muted);
+      letter-spacing:.4px; text-transform:uppercase; }
+    .sw { position:relative; }
+    .sw::after { content:''; position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      width:11px; height:11px; pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%236b7a99' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-size:contain; }
+    .input-f,.select-f { width:100%; background:var(--surface2); border:1px solid var(--border);
+      border-radius:9px; padding:10px 14px; color:var(--text);
+      font-family:'DM Sans',sans-serif; font-size:13.5px; outline:none;
+      transition:border-color .2s,box-shadow .2s; }
+    .select-f { appearance:none; padding-right:34px; cursor:pointer; }
+    .input-f::placeholder { color:var(--muted); }
+    .input-f:focus,.select-f:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(79,142,247,.11); }
+    .btn-primary { display:flex; align-items:center; justify-content:center; gap:7px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; border:none; border-radius:9px; padding:11px 20px;
+      font-family:'Syne',sans-serif; font-size:13.5px; font-weight:700;
+      cursor:pointer; transition:opacity .2s,transform .15s,box-shadow .2s;
+      box-shadow:0 4px 14px rgba(79,142,247,.22); white-space:nowrap; }
+    .btn-primary:hover { opacity:.92; transform:translateY(-1px); }
+    .btn-primary:active { transform:translateY(0); }
+    .btn-del { background:var(--danger-bg); color:var(--danger);
+      border:1px solid rgba(239,68,68,.15); border-radius:7px;
+      padding:5px 10px; font-size:11.5px; font-weight:600;
+      cursor:pointer; transition:all .15s; font-family:'DM Sans',sans-serif; white-space:nowrap; }
+    .btn-del:hover { background:rgba(239,68,68,.16); border-color:rgba(239,68,68,.3); }
+    .badge { background:var(--surface2); border:1px solid var(--border);
+      color:var(--muted); font-size:11.5px; font-weight:600;
+      padding:3px 9px; border-radius:999px; white-space:nowrap; }
+
+    /* SEARCH */
+    .search-bar { padding:11px 18px; border-bottom:1px solid var(--border); }
+    .search-input { background:var(--surface2); border:1px solid var(--border);
+      border-radius:8px; padding:7px 12px 7px 34px; color:var(--text);
+      font-family:'DM Sans',sans-serif; font-size:13px; outline:none;
+      width:100%; max-width:300px; transition:border-color .2s;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='none' stroke='%236b7a99' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:11px center; }
+    .search-input:focus { border-color:var(--accent); }
+    .search-input::placeholder { color:var(--muted); }
+
+    /* TABLE */
+    .data-table { width:100%; border-collapse:collapse; }
+    .data-table th { text-align:left; font-size:11px; font-weight:600; letter-spacing:.8px;
+      text-transform:uppercase; color:var(--muted); padding:9px 20px;
+      border-bottom:1px solid var(--border); }
+    .data-table td { padding:12px 20px; font-size:13.5px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    .data-table tr:last-child td { border-bottom:none; }
+    .data-table tbody tr:hover td { background:var(--surface2); }
+    .cell-name { display:flex; align-items:center; gap:10px; }
+    .cell-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center;
+      justify-content:center; font-size:15px; flex-shrink:0; }
+    .cell-icon.Cereals  { background:rgba(245,158,11,.13); }
+    .cell-icon.Shopping { background:rgba(34,197,94,.11); }
+    .cell-icon.Uniform  { background:rgba(129,140,248,.13); }
+    .cell-icon.Others   { background:rgba(100,116,139,.13); }
+    .cell-icon.school   { background:rgba(79,142,247,.1); }
+    .cell-text { font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px; }
+    .cat-pill { display:inline-flex; align-items:center; padding:3px 9px;
+      border-radius:999px; font-size:11.5px; font-weight:600; white-space:nowrap; }
+    .cat-pill.Cereals  { background:rgba(245,158,11,.13); color:var(--cat-cereals); }
+    .cat-pill.Shopping { background:rgba(34,197,94,.10); color:var(--cat-shopping); }
+    .cat-pill.Uniform  { background:rgba(129,140,248,.13); color:var(--cat-uniform); }
+    .cat-pill.Others   { background:rgba(100,116,139,.13); color:#94a3b8; }
+    .muted-text { color:var(--muted); font-size:12.5px; }
+    .action-col { text-align:right !important; }
+
+    /* EMPTY STATE */
+    .empty-state { padding:48px 20px; text-align:center; color:var(--muted); }
+    .empty-state .ei { font-size:36px; margin-bottom:10px; opacity:.35; }
+    .empty-state p { font-size:13.5px; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:24px; right:24px; background:var(--surface);
+      border:1px solid var(--border); border-radius:11px; padding:13px 18px;
+      font-size:13.5px; display:flex; align-items:center; gap:9px;
+      box-shadow:0 8px 32px rgba(0,0,0,.4); z-index:999;
+      transform:translateY(18px); opacity:0; transition:all .3s ease; pointer-events:none; }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast.success { border-color:rgba(34,197,94,.3); }
+    .toast.error   { border-color:rgba(239,68,68,.3); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(13px)} to{opacity:1;transform:translateY(0)} }
+
+
+    .form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+    .form-row .field-group{flex:1;min-width:140px}
+
+    /* School group headers inside table */
+    .school-group-header td {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px !important;
+    }
+    .school-group-header:first-child td { border-top: none; }
+    .school-group-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .school-group-item td:first-child {
+      padding-left: 36px !important;
+    }
+    .cat-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;animation:fadeUp .4s ease .04s both}
+    .cat-tab{padding:5px 14px;border-radius:999px;font-size:12px;font-weight:600;
+      border:1px solid var(--border);background:var(--surface);color:var(--muted);
+      cursor:pointer;transition:all .15s}
+    .cat-tab.active{background:var(--accent-glow);color:var(--accent);border-color:rgba(79,142,247,.3)}
+    .cat-tab[data-cat="Cereals"].active{background:rgba(245,158,11,.14);color:var(--cat-cereals);border-color:rgba(245,158,11,.3)}
+    .cat-tab[data-cat="Shopping"].active{background:rgba(34,197,94,.12);color:var(--cat-shopping);border-color:rgba(34,197,94,.3)}
+    .cat-tab[data-cat="Uniform"].active{background:rgba(129,140,248,.13);color:var(--cat-uniform);border-color:rgba(129,140,248,.3)}
+    .cat-tab[data-cat="Others"].active{background:rgba(100,116,139,.16);color:#94a3b8;border-color:rgba(100,116,139,.3)}
+
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo"><div class="logo-icon">📊</div><span class="logo-text">System</span></div>
+    <div class="nav-section">Operations</div>
+    <a href="dashboard.html" class="nav-link"><span class="icon">🏠</span> Dashboard</a>
+    <a href="deliveries.html" class="nav-link"><span class="icon">🚚</span> Deliveries</a>
+    <a href="invoices.html" class="nav-link"><span class="icon">🧾</span> Invoices</a>
+    <a href="payments.html" class="nav-link"><span class="icon">💳</span> Payments</a>
+    <a href="reports.html" class="nav-link"><span class="icon">📈</span> Reports</a>
+    <div class="sidebar-footer">
+      <div class="nav-section" style="margin-top:0">Setup</div>
+      <a href="schools.html" class="nav-link"><span class="icon">🏫</span> Schools</a>
+      <a href="items.html" class="nav-link active"><span class="icon">📦</span> Items</a>
+      <a href="pricing.html" class="nav-link"><span class="icon">🏷️</span> Pricing</a>
+      <button onclick="logout()" class="nav-link danger" style="margin-top:6px"><span class="icon">🚪</span> Logout</button>
+    </div>
+  </aside>
+  <div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="dashboard.html" class="back-btn" title="Back">&#8592;</a>
+      <span class="topbar-title">Items</span>
+    </div>
+    <div class="avatar">A</div>
+  </header>
+    <div class="content">
+
+      <div class="page-header"><h1>Items</h1><p>Manage items per school. Each school has its own item list.</p></div>
+
+      <div class="card" style="margin-bottom:18px;animation:fadeUp .4s ease both">
+        <div class="card-header"><div><div class="card-title">Add Item to School</div><div class="card-sub">Items are linked to a specific school</div></div></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="field-group">
+              <label class="field-label">School</label>
+              <div class="sw"><select id="itemSchool" class="select-f"><option value="">— Select school —</option></select></div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Item Name</label>
+              <input id="itemName" type="text" placeholder="e.g. Unga" class="input-f">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Category</label>
+              <div class="sw">
+                <select id="category" class="select-f">
+                  <option value="Cereals">🌾 Cereals</option>
+                  <option value="Shopping">🛒 Shopping</option>
+                  <option value="Uniform">👕 Uniform</option>
+                  <option value="Others">📌 Others</option>
+                </select>
+              </div>
+            </div>
+            <div style="padding-bottom:1px">
+              <button onclick="addItem()" class="btn-primary" style="height:42px">＋ Add Item</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-tabs">
+        <button class="cat-tab active" data-cat="All"      onclick="setCatFilter('All',this)">All</button>
+        <button class="cat-tab"        data-cat="Cereals"  onclick="setCatFilter('Cereals',this)">🌾 Cereals</button>
+        <button class="cat-tab"        data-cat="Shopping" onclick="setCatFilter('Shopping',this)">🛒 Shopping</button>
+        <button class="cat-tab"        data-cat="Uniform"  onclick="setCatFilter('Uniform',this)">👕 Uniform</button>
+        <button class="cat-tab"        data-cat="Others"   onclick="setCatFilter('Others',this)">📌 Others</button>
+      </div>
+
+      <div class="card" style="animation:fadeUp .4s ease .1s both">
+        <div class="card-header">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="card-title">Items</span>
+            <span class="badge" id="countBadge">0 items</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="sw" style="width:180px">
+              <select id="schoolFilter" class="select-f" style="font-size:12.5px;padding:7px 30px 7px 11px" onchange="applyFilters()">
+                <option value="">All Schools</option>
+              </select>
+            </div>
+            <input type="text" class="search-input" placeholder="Search items…" oninput="applyFilters()" style="max-width:200px">
+          </div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Item</th><th>Category</th><th>Added</th><th class="action-col"></th></tr></thead>
+          <tbody id="itemList"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState"><div class="ei">📦</div><p>No items found.</p></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="app.js"></script>
+  <script>
+
+  function showToast(msg, type='success') {
+    const t = document.getElementById('toast');
+    t.textContent = (type==='success'?'✅ ':'❌ ') + msg;
+    t.className = 'toast ' + type + ' show';
+    setTimeout(()=>t.classList.remove('show'), 3000);
+  }
+  function fmt(n){ return Number(n).toLocaleString('en-KE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function esc(s=''){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+
+    const catIcon = {Cereals:'🌾',Shopping:'🛒',Uniform:'👕',Others:'📌'};
+    let allItems=[]; let activeCat='All';
+
+    function renderItems(items){
+      allItems=items;
+      // Rebuild school filter dropdown from actual data
+      const seen = new Set();
+      const schools = [];
+      items.forEach(i => {
+        if (!seen.has(i.school_id)) {
+          seen.add(i.school_id);
+          schools.push({id: i.school_id, name: i.school_name});
+        }
+      });
+      // Sort schools alphabetically
+      schools.sort((a,b) => (a.name||'').localeCompare(b.name||''));
+
+      const sf = document.getElementById('schoolFilter');
+      const prev = sf.value;
+      sf.innerHTML = '<option value="">All Schools</option>' +
+        schools.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+      sf.value = prev;
+      applyFilters();
+    }
+
+    function applyFilters(){
+      const q      = document.querySelector('.search-input').value.toLowerCase();
+      const school = document.getElementById('schoolFilter').value;
+      let f = allItems;
+      if (activeCat !== 'All') f = f.filter(i => i.category === activeCat);
+      if (school)              f = f.filter(i => String(i.school_id) === String(school));
+      if (q)                   f = f.filter(i => i.name.toLowerCase().includes(q));
+      _renderGrouped(f);
+    }
+
+    function _renderGrouped(items){
+      const tbody = document.getElementById('itemList');
+      const empty = document.getElementById('emptyState');
+      document.getElementById('countBadge').textContent = items.length + ' item' + (items.length!==1?'s':'');
+
+      if (!items.length) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      // Group items by school, preserving alphabetical school order
+      const groups = {};
+      const schoolOrder = [];
+      items.forEach(it => {
+        const key = it.school_id || '__none__';
+        if (!groups[key]) {
+          groups[key] = { name: it.school_name || '—', items: [] };
+          schoolOrder.push(key);
+        }
+        groups[key].items.push(it);
+      });
+
+      let html = '';
+      schoolOrder.forEach(key => {
+        const group = groups[key];
+        // School header row
+        html += `
+          <tr class="school-group-header">
+            <td colspan="4">
+              <div class="school-group-label">
+                <div class="cell-icon school" style="font-size:13px;width:26px;height:26px">🏫</div>
+                <span>${esc(group.name)}</span>
+                <span class="badge" style="margin-left:6px">${group.items.length} item${group.items.length!==1?'s':''}</span>
+              </div>
+            </td>
+          </tr>`;
+        // Item rows for this school
+        group.items.forEach(it => {
+          html += `
+          <tr class="school-group-item">
+            <td><div class="cell-name"><div class="cell-icon ${esc(it.category)}">${catIcon[it.category]||'📌'}</div><span class="cell-text">${esc(it.name)}</span></div></td>
+            <td><span class="cat-pill ${esc(it.category)}">${esc(it.category)}</span></td>
+            <td class="muted-text">${it.created_at?new Date(it.created_at).toLocaleDateString():'—'}</td>
+            <td class="action-col"><button class="btn-del" onclick="deleteItem('${esc(String(it.id))}')">🗑 Delete</button></td>
+          </tr>`;
+        });
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    function setCatFilter(cat,btn){
+      activeCat=cat;
+      document.querySelectorAll('.cat-tab').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));
+      applyFilters();
+    }
+
+    // Called by app.js after fetching schools
+    function renderSchoolOptions(schools){
+      const sel = document.getElementById('itemSchool');
+      sel.innerHTML = '<option value="">— Select school —</option>' +
+        schools.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+    }
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>School Pricing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0f1a;
+      --surface: #111827;
+      --surface2: #1a2235;
+      --border: rgba(255,255,255,0.07);
+      --accent: #4f8ef7;
+      --accent2: #7c3aed;
+      --accent-glow: rgba(79,142,247,0.18);
+      --text: #f0f4ff;
+      --muted: #6b7a99;
+      --danger: #ef4444;
+      --danger-bg: rgba(239,68,68,0.08);
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --cat-cereals: #f59e0b;
+      --cat-shopping: #22c55e;
+      --cat-uniform: #818cf8;
+      --cat-others: #64748b;
+      --sidebar-w: 240px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(79,142,247,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(124,58,237,0.06) 0%, transparent 60%);
+      z-index: 0;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 22px 13px 18px;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 7px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .logo-icon {
+      width: 33px; height: 33px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 0 14px var(--accent-glow);
+      flex-shrink: 0;
+    }
+    .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--text); }
+    .nav-section {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.3px;
+      text-transform: uppercase; color: var(--muted);
+      padding: 0 9px; margin: 10px 0 4px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 9px;
+      padding: 9px 11px; border-radius: 9px;
+      color: var(--muted); text-decoration: none;
+      font-size: 13.5px; font-weight: 500;
+      transition: background .15s, color .15s;
+      cursor: pointer; border: none;
+      background: transparent; width: 100%;
+      text-align: left; white-space: nowrap;
+    }
+    .nav-link:hover { background: var(--surface2); color: var(--text); }
+    .nav-link.active {
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid rgba(79,142,247,0.2);
+    }
+    .nav-link .icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+    .nav-link.danger:hover { background: rgba(239,68,68,0.1); color: var(--danger); }
+    .sidebar-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 15px 30px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .back-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); font-size: 16px; cursor: pointer;
+      text-decoration: none; transition: all .15s; flex-shrink: 0;
+    }
+    .back-btn:hover { background: var(--surface); color: var(--text); border-color: rgba(255,255,255,0.15); }
+    .topbar-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+    .avatar {
+      width: 33px; height: 33px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700;
+      font-family: 'Syne', sans-serif; cursor: pointer;
+    }
+    .content { padding: 32px 30px; flex: 1; }
+
+    /* ── PAGE HEADER ── */
+    .page-header { margin-bottom: 24px; animation: fadeUp .4s ease both; }
+    .page-header h1 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -.4px; }
+    .page-header p { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+
+    /* ── SCHOOL SELECTOR ── */
+    .selector-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeUp .4s ease .04s both;
+    }
+    .selector-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      white-space: nowrap;
+    }
+    .sw-wide {
+      position: relative;
+      flex: 1; min-width: 200px; max-width: 340px;
+    }
+    .sw-wide::after {
+      content: '';
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      width: 11px; height: 11px; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%236b7a99' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-size: contain;
+    }
+    .select-f {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 34px 10px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .select-f:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,.11); }
+
+    .meta-chips { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .meta-chip {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 999px; padding: 4px 11px;
+      font-size: 11.5px; color: var(--muted);
+    }
+    .meta-chip span { color: var(--text); font-weight: 600; }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 13px;
+      margin-bottom: 20px;
+      animation: fadeUp .4s ease .07s both;
+    }
+    .stat-mini {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 16px 15px;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-mini::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: .5;
+    }
+    .stat-mini .sl { font-size: 11px; font-weight: 600; letter-spacing: .7px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+    .stat-mini .sv { font-family: 'Syne', sans-serif; font-size: 21px; font-weight: 800; }
+    .stat-mini .si { position: absolute; top: 14px; right: 12px; font-size: 17px; opacity: .18; }
+
+    /* ── CARD ── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+      gap: 10px; flex-wrap: wrap;
+    }
+    .card-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+    .badge {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+      padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+    }
+    .search-input {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 12px 7px 34px;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 13px; outline: none; max-width: 220px; width: 100%;
+      transition: border-color .2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='none' stroke='%236b7a99' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: 11px center;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--muted); }
+
+    /* ── PRICING TABLE ── */
+    .pricing-table { width: 100%; border-collapse: collapse; }
+    .pricing-table th {
+      text-align: left; font-size: 11px; font-weight: 600;
+      letter-spacing: .8px; text-transform: uppercase; color: var(--muted);
+      padding: 9px 20px; border-bottom: 1px solid var(--border);
+    }
+    .pricing-table td {
+      padding: 12px 20px;
+      font-size: 13.5px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .pricing-table tr:last-child td { border-bottom: none; }
+    .pricing-table tbody tr:hover td { background: var(--surface2); }
+
+    /* cell layouts */
+    .cell-name { display: flex; align-items: center; gap: 10px; }
+    .cell-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .cell-icon.Cereals  { background: rgba(245,158,11,.13); }
+    .cell-icon.Shopping { background: rgba(34,197,94,.11); }
+    .cell-icon.Uniform  { background: rgba(129,140,248,.13); }
+    .cell-icon.Others   { background: rgba(100,116,139,.13); }
+    .cell-text { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+
+    .cat-pill {
+      display: inline-flex; align-items: center;
+      padding: 3px 9px; border-radius: 999px;
+      font-size: 11.5px; font-weight: 600; white-space: nowrap;
+    }
+    .cat-pill.Cereals  { background: rgba(245,158,11,.13); color: var(--cat-cereals); }
+    .cat-pill.Shopping { background: rgba(34,197,94,.10);  color: var(--cat-shopping); }
+    .cat-pill.Uniform  { background: rgba(129,140,248,.13); color: var(--cat-uniform); }
+    .cat-pill.Others   { background: rgba(100,116,139,.13); color: #94a3b8; }
+
+    /* ── PRICE CELL ── */
+    .price-cell { display
+: flex; align-items: center; gap: 8px; }
+    .price-display {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px; font-weight: 700;
+      min-width: 80px;
+      color: var(--text);
+    }
+    .price-display.not-set { color: var(--muted); font-size: 12px; font-family: 'DM Sans', sans-serif; font-weight: 400; }
+    .price-input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 700;
+      outline: none; width: 100px;
+      display: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .price-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,.11); }
+    .btn-edit {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 7px; padding: 5px 11px;
+      font-size: 12px; color: var(--muted);
+      cursor: pointer; transition: all .15s;
+      font-family: 'DM Sans', sans-serif; font-weight: 500;
+      white-space: nowrap;
+    }
+    .btn-edit:hover { background: var(--surface2); color: var(--text); border-color: rgba(255,255,255,0.15); }
+    .btn-save {
+      background: rgba(34,197,94,.11);
+      border: 1px solid rgba(34,197,94,.25);
+      border-radius: 7px; padding: 5px 11px;
+      font-size: 12px; color: var(--success);
+      cursor: pointer; transition: all .15s;
+      font-family: 'DM Sans', sans-serif; font-weight: 600;
+      display: none; white-space: nowrap;
+    }
+    .btn-save:hover { background: rgba(34,197,94,.2); }
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 7px; padding: 5px 9px;
+      font-size: 12px; color: var(--muted);
+      cursor: pointer; transition: all .15s;
+      font-family: 'DM Sans', sans-serif;
+      display: none;
+    }
+    .btn-cancel:hover { color: var(--danger); border-color: rgba(239,68,68,.3); }
+
+    /* ── PLACEHOLDER ── */
+    .placeholder-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 60px 24px;
+      text-align: center;
+      color: var(--muted);
+      animation: fadeUp .4s ease .1s both;
+    }
+    .placeholder-card .pi { font-size: 42px; margin-bottom: 14px; opacity: .3; }
+    .placeholder-card p { font-size: 14px; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { padding: 48px 20px; text-align: center; color: var(--muted); }
+    .empty-state .ei { font-size: 36px; margin-bottom: 10px; opacity: .35; }
+    .empty-state p { font-size: 13.5px; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 11px; padding: 13px 18px;
+      font-size: 13.5px; display: flex; align-items: center; gap: 9px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      z-index: 999; transform: translateY(18px); opacity: 0;
+      transition: all .3s ease; pointer-events: none;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: rgba(34,197,94,.3); }
+    .toast.error   { border-color: rgba(239,68,68,.3); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(13px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">📊</div>
+      <span class="logo-text">System</span>
+    </div>
+
+    <div class="nav-section">Operations</div>
+    <a href="dashboard.html"  class="nav-link"><span class="icon">🏠</span> Dashboard</a>
+    <a href="deliveries.html" class="nav-link"><span class="icon">🚚</span> Deliveries</a>
+    <a href="invoices.html"   class="nav-link"><span class="icon">🧾</span> Invoices</a>
+    <a href="payments.html"   class="nav-link"><span class="icon">💳</span> Payments</a>
+    <a href="reports.html"    class="nav-link"><span class="icon">📈</span> Reports</a>
+
+    <div class="sidebar-footer">
+      <div class="nav-section" style="margin-top:0">Setup</div>
+      <a href="schools.html"  class="nav-link"><span class="icon">🏫</span> Schools</a>
+      <a href="items.html"    class="nav-link"><span class="icon">📦</span> Items</a>
+      <a href="pricing.html"  class="nav-link active"><span class="icon">🏷️</span> Pricing</a>
+      <button onclick="logout()" class="nav-link danger" style="margin-top:6px">
+        <span class="icon">🚪</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <a href="dashboard.html" class="back-btn" title="Back">&#8592;</a>
+        <span class="topbar-title">School Pricing</span>
+      </div>
+      <div class="avatar">A</div>
+    </header>
+
+    <div class="content">
+
+      <div class="page-header">
+        <h1>School Pricing</h1>
+        <p>Set item prices per school. Select a school to view and edit its price list.</p>
+      </div>
+
+      <!-- School selector -->
+      <div class="selector-card">
+        <span class="selector-label">School</span>
+        <div class="sw-wide">
+          <select id="schoolSelect" class="select-f" onchange="onSchoolChange()">
+            <option value="">— Choose a school —</option>
+          </select>
+        </div>
+        <div class="meta-chips" id="schoolMeta" style="display:none">
+          <div class="meta-chip">Items: <span id="metaItems">0</span></div>
+          <div class="meta-chip">Priced: <span id="metaPriced">0</span></div>
+          <div class="meta-chip">Value: <span id="metaTotal">KES 0</span></div>
+        </div>
+      </div>
+
+      <!-- Stats row (hidden until school chosen) -->
+      <div class="stats-row" id="statsRow" style="display:none">
+        <div class="stat-mini">
+          <div class="sl">Total Items</div>
+          <div class="sv" id="statTotal">0</div>
+          <span class="si">📦</span>
+        </div>
+        <div class="stat-mini">
+          <div class="sl">Priced</div>
+          <div class="sv" id="statPriced">0</div>
+          <span class="si">✅</span>
+        </div>
+        <div class="stat-mini">
+          <div class="sl">Unpriced</div>
+          <div class="sv" id="statUnpriced">0</div>
+          <span class="si">⚠️</span>
+        </div>
+        <div class="stat-mini">
+          <div class="sl">Catalogue Value</div>
+          <div class="sv" id="statValue">—</div>
+          <span class="si">💰</span>
+        </div>
+      </div>
+
+      <!-- Pricing table card (hidden until school chosen) -->
+      <div id="pricingCard" class="card" style="display:none; animation:fadeUp .4s ease .1s both">
+        <div class="card-header">
+          <div style="display:flex; align-items:center; gap:9px">
+            <span class="card-title">Price List</span>
+            <span class="badge" id="countBadge">0 items</span>
+          </div>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search items…"
+            oninput="filterPricing(this.value)"
+          >
+        </div>
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Category</th>
+              <th>Price (KES)</th>
+            </tr>
+          </thead>
+          <tbody id="pricingTable"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" style="display:none">
+          <div class="ei">🏷️</div>
+          <p>No items found for this school.</p>
+          <p style="font-size:12px; margin-top:6px">Add items for this school in the <a href="items.html" style="color:var(--accent)">Items page</a> first.</p>
+        </div>
+      </div>
+
+      <!-- Placeholder shown before any school is selected -->
+      <div id="placeholderCard" class="placeholder-card">
+        <div class="pi">🏷️</div>
+        <p>Select a school above to view and edit its item prices.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    /* ── helpers ── */
+    function showToast(msg, type) {
+      type = type || 'success';
+      var t = document.getElementById('toast');
+      t.textContent = (type === 'success' ? '\u2705 ' : '\u274C ') + msg;
+      t.className = 'toast ' + type + ' show';
+      setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    function fmt(n) {
+      return Number(n).toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function esc(s) {
+      s = s == null ? '' : String(s);
+      return s.replace(/[&<>"']/g, function(c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    /* ── state ── */
+    var catIcon = { Cereals: '\uD83C\uDF3E', Shopping: '\uD83D\uDED2', Uniform: '\uD83D\uDC55', Others: '\uD83D\uDCCC' };
+    var allRows = [];
+
+    /* ── school change ── */
+    function onSchoolChange() {
+      var id = document.getElementById('schoolSelect').value;
+      if (!id) {
+        document.getElementById('placeholderCard').style.display = '';
+        document.getElementById('pricingCard').style.display = 'none';
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('schoolMeta').style.display = 'none';
+        return;
+      }
+      if (typeof loadPricingForSchool === 'function') {
+        loadPricingForSchool(id);
+      }
+    }
+
+    /* ── called by app.js after fetching items+prices ── */
+    function renderPricing(rows) {
+      allRows = rows;
+
+      document.getElementById('placeholderCard').style.display = 'none';
+      document.getElementById('pricingCard').style.display = '';
+      document.getElementById('statsRow').style.display = '';
+
+      var priced = rows.filter(function(r) { return r.price > 0; }).length;
+      var total  = rows.reduce(function(s, r) { return s + (parseFloat(r.price) || 0); }, 0);
+
+      document.getElementById('statTotal').textContent    = rows.length;
+      document.getElementById('statPriced').textContent   = priced;
+      document.getElementById('statUnpriced').textContent = rows.length - priced;
+      document.getElementById('statValue').textContent    = total > 0 ? fmt(total) : '—';
+      document.getElementById('metaItems').textContent    = rows.length;
+      document.getElementById('metaPriced').textContent   = priced;
+      document.getElementById('metaTotal').textContent    = 'KES ' + fmt(total);
+      document.getElementById('schoolMeta').style.display = 'flex';
+
+      _renderPricingTable(rows);
+    }
+
+    function _renderPricingTable(rows) {
+      var tbody = document.getElementById('pricingTable');
+      var empty = document.getElementById('emptyState');
+      var badge = document.getElementById('countBadge');
+
+      badge.textContent = rows.length + ' item' + (rows.length !== 1 ? 's' : '');
+
+      if (!rows.length) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      var html = '';
+      rows.forEach(function(r) {
+        var id       = esc(r.id);
+        var name     = esc(r.name);
+        var cat      = esc(r.category);
+        var icon     = catIcon[r.category] || '\uD83D\uDCCC';
+        var priceVal = r.price > 0 ? fmt(r.price) : '';
+
+        html += '<tr id="row-' + id + '">';
+
+        // Item name column
+        html += '<td>';
+        html += '<div class="cell-name">';
+        html += '<div class="cell-icon ' + cat + '">' + icon + '</div>';
+        html += '<span class="cell-text">' + name + '</span>';
+        html += '</div>';
+        html += '</td>';
+
+        // Category column
+        html += '<td>';
+        html += '<span class="cat-pill ' + cat + '">' + cat + '</span>';
+        html += '</td>';
+
+        // Price column
+        html += '<td>';
+        html += '<div class="price-cell">';
+
+        // Display span
+        if (r.price > 0) {
+          html += '<span class="price-display" id="disp-' + id + '">' + priceVal + '</span>';
+        } else {
+          html += '<span class="price-display not-set" id="disp-' + id + '">Not set</span>';
+        }
+
+        // Input (hidden by default)
+        html += '<input class="price-input" id="inp-' + id + '" type="number" min="0" step="0.01"';
+        html += ' value="' + (r.price > 0 ? r.price : '') + '"';
+        html += ' placeholder="0.00"';
+        html += ' onkeydown="handlePriceKey(event, \'' + id + '\')">';
+
+        // Edit button
+        html += '<button class="btn-edit" id="edit-' + id + '" onclick="startEdit(\'' + id + '\')">&#9999;&#65039; Edit</button>';
+
+        // Save button (hidden by default)
+        html += '<button class="btn-save" id="save-' + id + '" onclick="savePrice(\'' + id + '\')">&#10003; Save</button>';
+
+        // Cancel button (hidden by default)
+        html += '<button class="btn-cancel" id="cancel-' + id + '" onclick="cancelEdit(\'' + id + '\')">&#10005;</button>';
+
+        html += '</div>';
+        html += '</td>';
+        html += '</tr>';
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    /* ── filter by search ── */
+    function filterPricing(q) {
+      var lower = q.toLowerCase();
+      var filtered = allRows.filter(function(r) {
+        return r.name.toLowerCase().indexOf(lower) !== -1;
+      });
+      _renderPricingTable(filtered);
+    }
+
+    /* ── inline edit controls ── */
+    function startEdit(id) {
+      document.getElementById('disp-'   + id).style.display = 'none';
+      document.getElementById('edit-'   + id).style.display = 'none';
+      document.getElementById('inp-'    + id).style.display = 'block';
+      document.getElementById('save-'   + id).style.display = 'block';
+      document.getElementById('cancel-' + id).style.display = 'block';
+      document.getElementById('inp-'    + id).focus();
+      document.getElementById('inp-'    + id).select();
+    }
+
+    function cancelEdit(id) {
+      document.getElementById('disp-'   + id).style.display = '';
+      document.getElementById('edit-'   + id).style.display = '';
+      document.getElementById('inp-'    + id).style.display = 'none';
+      document.getElementById('save-'   + id).style.display = 'none';
+      document.getElementById('cancel-' + id).style.display = 'none';
+    }
+
+    function handlePriceKey(event, id) {
+      if (event.key === 'Enter')  savePrice(id);
+      if (event.key === 'Escape') cancelEdit(id);
+    }
+
+    function savePrice(id) {
+      var inputEl = document.getElementById('inp-' + id);
+      var val = parseFloat(inputEl.value) || 0;
+
+      // Call app.js to persist to Supabase
+      if (typeof updatePrice === 'function') {
+        updatePrice(id, val);
+      }
+
+      // Optimistic UI update
+      var row = allRows.find(function(r) { return String(r.id) === String(id); });
+      if (row) row.price = val;
+
+      var dispEl = document.getElementById('disp-' + id);
+      if (val > 0) {
+        dispEl.textContent = fmt(val);
+        dispEl.className = 'price-display';
+      } else {
+        dispEl.textContent = 'Not set';
+        dispEl.className = 'price-display not-set';
+      }
+
+      // Restore display / hide edit controls
+      cancelEdit(id);
+
+      // Refresh stats live
+      var priced = allRows.filter(function(r) { return r.price > 0; }).length;
+      var total  = allRows.reduce(function(s, r) { return s + (parseFloat(r.price) || 0); }, 0);
+
+      document.getElementById('statPriced').textContent   = priced;
+      document.getElementById('statUnpriced').textContent = allRows.length - priced;
+      document.getElementById('statValue').textContent    = total > 0 ? fmt(total) : '\u2014';
+      document.getElementById('metaPriced').textContent   = priced;
+      document.getElementById('metaTotal').textContent    = 'KES ' + fmt(total);
+
+      showToast('Price saved');
+    }
+  </script>
+
+</body>
+</html>
