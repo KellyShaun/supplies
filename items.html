@@ -378,6 +378,10 @@
               <div class="sw"><select id="itemSchool" class="select-f"><option value="">— Select school —</option></select></div>
             </div>
             <div class="field-group">
+              <label class="field-label">Company</label>
+              <div class="sw"><select id="itemCompany" class="select-f"><option value="">— Select company —</option></select></div>
+            </div>
+            <div class="field-group">
               <label class="field-label">Item Name</label>
               <input id="itemName" type="text" placeholder="e.g. Unga" class="input-f">
             </div>
@@ -423,7 +427,7 @@
           </div>
         </div>
         <div class="table-scroll"><table class="data-table">
-          <thead><tr><th>Item</th><th>Category</th><th>Added</th><th class="action-col"></th></tr></thead>
+          <thead><tr><th>Item</th><th>Company</th><th>Category</th><th>Added</th><th class="action-col"></th></tr></thead>
           <tbody id="itemList"></tbody>
         </table></div>
         <div class="empty-state" id="emptyState"><div class="ei">📦</div><p>No items found.</p></div>
@@ -524,6 +528,7 @@
           html += `
           <tr class="school-group-item">
             <td><div class="cell-name"><div class="cell-icon ${esc(it.category)}">${catIcon[it.category]||'📌'}</div><span class="cell-text">${esc(it.name)}</span></div></td>
+            <td class="muted-text" style="font-size:12.5px">🏢 ${esc(it.company_name||'—')}</td>
             <td><span class="cat-pill ${esc(it.category)}">${esc(it.category)}</span></td>
             <td class="muted-text">${it.created_at?new Date(it.created_at).toLocaleDateString():'—'}</td>
             <td class="action-col"><button class="btn-del" onclick="deleteItem('${esc(String(it.id))}')">🗑 Delete</button></td>
@@ -545,6 +550,13 @@
       const sel = document.getElementById('itemSchool');
       sel.innerHTML = '<option value="">— Select school —</option>' +
         schools.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+    }
+    // Called by app.js after fetching companies
+    function renderCompanyOptions(companies){
+      const sel = document.getElementById('itemCompany');
+      if (!sel) return;
+      sel.innerHTML = '<option value="">— Select company —</option>' +
+        companies.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
     }
 
   </script>
